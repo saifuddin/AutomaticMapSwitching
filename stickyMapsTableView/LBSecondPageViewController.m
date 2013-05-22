@@ -60,10 +60,12 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
 	}
 	CLLocation *location = places[indexPath.row];
+	cell.contentView.backgroundColor = (indexPath.row < places.count - 6) ? [UIColor whiteColor] : [UIColor redColor];
 	cell.textLabel.text = [NSString stringWithFormat:@"%f, %f",location.coordinate.latitude, location.coordinate.longitude];
 	return cell;
 }
 
+// For fast switching
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     NSIndexPath *firstVisibleIndexPath = [[tableView indexPathsForVisibleRows] objectAtIndex:0];
@@ -76,13 +78,14 @@
 	}
 }
 
+// For slow switching
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     NSIndexPath *firstVisibleIndexPath = [[tableView indexPathsForVisibleRows] objectAtIndex:0];
 	if (currentVisibleRow != firstVisibleIndexPath.row && !fastSwitching)
 	{
 		currentVisibleRow = firstVisibleIndexPath.row;
-		//		NSLog(@"first visible cell's section: %i, row: %i", firstVisibleIndexPath.section, firstVisibleIndexPath.row);
+//		NSLog(@"first visible cell's section: %i, row: %i", firstVisibleIndexPath.section, firstVisibleIndexPath.row);
 		CLLocation *location = places[firstVisibleIndexPath.row];
 		[mapView setCenterCoordinate:location.coordinate zoomLevel:10 animated:YES];
 	}
